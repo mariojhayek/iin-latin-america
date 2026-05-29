@@ -1,35 +1,582 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IIN-Latin America | University Partnership Platform</title>
-  <meta name="description" content="Illinois Innovation Network – Latin America University Partnership Platform. Connecting IIN universities with Córdoba, Argentina." />
-  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;600;700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #F6F3ED; font-family: "Lato", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
-    #root { min-height: 100vh; }
-    input, select, textarea, button { font-family: inherit; }
-    button { cursor: pointer; }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #F6F3ED; }
-    ::-webkit-scrollbar-thumb { background: #DDD8CE; border-radius: 3px; }
-    table { border-collapse: collapse; }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>IIN-Latin America | University Partnership Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Lato:wght@300;400;600;700;900&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#F6F3ED;--sf:#fff;--wm:#F0EDE6;--nv:#1B3A5C;--nm:#2C5282;--nl:#EBF0F8;--gd:#B5752A;--gl:#F7EDD8;--gk:#8B5A1E;--gn:#2E6B4F;--tx:#1A1F2E;--mu:#6B7280;--li:#A0AEC0;--bd:#DDD8CE;--bl:#EDE9E1;--t1c:#2E6B4F;--t1b:#E0F2EB;--t2c:#2C5282;--t2b:#DBEAFE;--t3c:#B5752A;--t3b:#F7EDD8;--t4c:#6B7280;--t4b:#F3F4F6}
+body{background:var(--bg);font-family:'Lato',sans-serif;color:var(--tx);-webkit-font-smoothing:antialiased}
+button{cursor:pointer;font-family:inherit}
+input,select,textarea{font-family:inherit}
+/* HEADER */
+#hdr{background:var(--sf);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:100}
+#hdr-top{display:flex;justify-content:space-between;align-items:center;padding:10px 20px;border-bottom:1px solid var(--bl)}
+#hdr-brand{display:flex;align-items:center;gap:12px}
+#brand-title{font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;color:var(--nv);line-height:1}
+#brand-sub{font-size:8px;color:var(--mu);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+#brand-divider{width:1px;height:28px;background:var(--bd)}
+#brand-corridor{font-size:12px;font-weight:700;color:var(--gd);font-family:'Libre Baskerville',serif;font-style:italic}
+#hdr-controls{display:flex;align-items:center;gap:8px}
+#lang-toggle{display:flex;border-radius:6px;border:1.5px solid var(--bd);overflow:hidden}
+.lang-btn{padding:4px 10px;background:var(--sf);color:var(--mu);border:none;font-size:10px;font-weight:700}
+.lang-btn.active{background:var(--nv);color:#fff}
+#corr-select{padding:4px 8px;border-radius:6px;border:1px solid var(--bd);background:var(--wm);font-size:10px;color:var(--nv);font-weight:600}
+#nav-tabs{display:flex;padding:0 20px;overflow-x:auto}
+.nav-tab{padding:8px 14px;background:none;border:none;border-bottom:2px solid transparent;color:var(--mu);font-size:11px;font-weight:700;white-space:nowrap}
+.nav-tab.active{color:var(--nv);border-bottom-color:var(--nv)}
+/* PAGES */
+.page{display:none;padding:20px;max-width:960px;margin:0 auto}
+.page.active{display:block}
+/* SECTION HEADS */
+.shead{font-size:8px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--mu);border-bottom:1px solid var(--bd);padding-bottom:5px;margin:18px 0 12px}
+/* OVERVIEW */
+.corridor-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px}
+.corridor-card{background:var(--sf);border:1.5px solid var(--bd);border-radius:10px;padding:12px 16px;min-width:140px}
+.corridor-card.active-corridor{background:var(--nl);border-color:var(--nv)}
+.corridor-flag{font-size:22px}
+.corridor-name{font-family:'Libre Baskerville',serif;font-size:13px;font-weight:700;color:var(--nv);margin-top:3px}
+.corridor-card:not(.active-corridor) .corridor-name{color:var(--mu)}
+.corridor-sub{font-size:10px;color:var(--mu);margin-top:1px}
+.corridor-status{font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-top:5px;color:var(--li)}
+.corridor-card.active-corridor .corridor-status{color:var(--gn)}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:24px}
+.stat-card{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:14px;text-align:center}
+.stat-n{font-size:22px;font-weight:700;color:var(--nv);font-family:'Libre Baskerville',serif}
+.stat-l{font-size:10px;color:var(--mu);margin-top:2px;line-height:1.4}
+.how-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:24px}
+.how-card{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:14px}
+.how-n{font-family:'Roboto Mono',monospace;font-size:11px;color:var(--gd);font-weight:500;margin-bottom:6px}
+.how-t{font-family:'Libre Baskerville',serif;font-size:13px;color:var(--nv);margin-bottom:5px}
+.how-d{font-size:11px;color:var(--mu);line-height:1.7}
+.quick-btns{display:flex;flex-wrap:wrap;gap:10px}
+.quick-btn{padding:9px 18px;border-radius:8px;border:1.5px solid var(--nv);font-size:12px;font-weight:600;background:var(--sf);color:var(--nv)}
+.quick-btn.primary{background:var(--nv);color:#fff}
+/* DIRECTORY */
+.dir-controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+#dir-search{flex:1;min-width:160px;padding:8px 12px;border-radius:8px;border:1.5px solid var(--bd);background:var(--sf);font-size:12px;color:var(--tx);outline:none}
+.filter-btn{padding:7px 14px;border-radius:6px;border:1.5px solid var(--bd);background:var(--sf);color:var(--mu);font-size:11px;font-weight:600}
+.filter-btn.active{background:var(--nv);color:#fff;border-color:var(--nv)}
+#dir-hint{font-size:10px;color:var(--mu);margin-bottom:12px}
+.uni-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.uni-card{background:var(--sf);border:1.5px solid var(--bd);border-radius:10px;padding:14px;cursor:pointer}
+.uni-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.uni-abbr{font-size:15px;font-weight:700;font-family:'Libre Baskerville',serif;color:var(--tx)}
+.uni-tag{font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
+.uni-count{font-size:9px;font-weight:700;padding:2px 7px;border-radius:6px}
+.uni-region{font-size:10px;color:var(--mu);margin-bottom:8px}
+.pills{display:flex;flex-wrap:wrap;gap:3px}
+.pill{display:inline-block;background:var(--nl);color:var(--nm);border:1px solid rgba(44,82,130,0.13);border-radius:4px;padding:2px 7px;font-size:10px}
+.pill-gold{background:var(--gl);color:var(--gk);border-color:rgba(181,117,42,0.2)}
+/* TIER BADGES */
+.tier{display:inline-block;border-radius:20px;padding:2px 9px;font-size:10px;font-weight:700;white-space:nowrap;border:1px solid transparent}
+.t1{background:var(--t1b);color:var(--t1c);border-color:rgba(46,107,79,0.27)}
+.t2{background:var(--t2b);color:var(--t2c);border-color:rgba(44,82,130,0.27)}
+.t3{background:var(--t3b);color:var(--t3c);border-color:rgba(181,117,42,0.27)}
+.t4{background:var(--t4b);color:var(--t4c);border-color:rgba(107,114,128,0.27)}
+/* MATRIX */
+.matrix-legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.leg-item{display:flex;align-items:center;gap:5px;border-radius:6px;padding:4px 9px;font-size:10px;font-weight:700;border:1px solid transparent}
+.matrix-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--bd);background:var(--sf)}
+.matrix-wrap table{border-collapse:collapse;width:100%;min-width:660px}
+.matrix-wrap th{padding:10px 6px;background:var(--nv);color:#fff;font-size:9px;font-family:'Lato',sans-serif;font-weight:700;text-align:center;border-left:1px solid rgba(255,255,255,0.15)}
+.matrix-wrap th:first-child{text-align:left;padding:10px 12px;border-left:none;border-right:1px solid rgba(255,255,255,0.2);min-width:90px}
+.matrix-wrap td{padding:7px 4px;text-align:center;border-left:1px solid var(--bl);border-bottom:1px solid var(--bl);font-size:12px;font-weight:800;font-family:'Roboto Mono',monospace}
+.matrix-wrap tr td:first-child{text-align:left;padding:8px 12px;border-left:none;border-right:1px solid var(--bd)}
+.matrix-wrap tr:nth-child(even){background:var(--wm)}
+.td-name{font-size:11px;font-weight:700;font-family:'Libre Baskerville',serif;color:var(--nv)}
+.td-reg{font-size:8px;color:var(--mu)}
+.td-tier{font-size:7px;opacity:.8}
+.matrix-note{font-size:10px;color:var(--mu);margin-top:8px}
+/* FACULTY */
+.kw-box{background:var(--sf);border:1.5px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:16px}
+.kw-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--nm);margin-bottom:7px}
+#kw-input{width:100%;padding:9px 12px;border-radius:8px;border:1.5px solid var(--bd);background:var(--bg);font-size:12px;color:var(--tx);outline:none;box-sizing:border-box}
+#kw-results{margin-top:14px}
+.pairs-grid{margin-bottom:18px}
+.pair-card{background:var(--gl);border:1px solid rgba(181,117,42,0.2);border-radius:10px;padding:11px 14px;margin-bottom:8px}
+.pair-row{display:flex;gap:8px;align-items:center;margin-bottom:6px;flex-wrap:wrap}
+.pair-name1{font-size:11px;font-weight:700;color:var(--nv);font-family:'Libre Baskerville',serif;flex:1}
+.pair-arrow{font-size:16px;color:var(--gd)}
+.pair-name2{font-size:11px;font-weight:700;color:var(--gk);font-family:'Libre Baskerville',serif;flex:1;text-align:right}
+.pair-uni1{font-size:9px;color:var(--nm)}
+.pair-uni2{font-size:9px;color:var(--gk);text-align:right}
+.shared-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.shared-label{font-size:9px;font-weight:700;color:var(--mu)}
+.res-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.res-col-title{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px}
+.fac-card{background:var(--sf);border:1.5px solid var(--bd);border-radius:10px;padding:11px 12px;margin-bottom:7px}
+.fac-name{font-size:12px;font-weight:700;font-family:'Libre Baskerville',serif;color:var(--tx);margin-bottom:2px}
+.fac-uni{font-size:9px;font-weight:700;margin-bottom:5px}
+.fac-h{font-size:9px;font-weight:700;padding:2px 6px;border-radius:5px}
+.fac-top{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;margin-bottom:5px}
+.no-results{color:var(--mu);font-size:12px;padding:10px 0}
+/* DETAIL VIEW */
+#detail-view{display:none;max-width:960px;margin:0 auto;padding:0 0 40px}
+#detail-view.active{display:block}
+.detail-hdr{padding:16px 20px 12px;border-bottom:1px solid var(--bd)}
+.detail-back{background:none;border:none;font-size:12px;font-weight:600;margin-bottom:10px;display:block}
+.detail-abbr{font-size:24px;font-weight:700;font-family:'Libre Baskerville',serif;color:var(--tx)}
+.detail-full{font-size:11px;font-weight:700;margin-top:2px}
+.detail-region{font-size:10px;color:var(--mu);margin-top:2px}
+.detail-hub{display:inline-block;margin-top:7px;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:600;border:1px solid transparent}
+.detail-tabs{display:flex;border-bottom:1px solid var(--bd)}
+.detail-tab{padding:9px 16px;background:none;border:none;border-bottom:2px solid transparent;color:var(--mu);font-size:12px;font-weight:700}
+.detail-tab.active{border-bottom-color:var(--nv);color:var(--nv)}
+.detail-tab.active-gold{border-bottom-color:var(--gd);color:var(--gd)}
+.detail-body{padding:14px 20px}
+.match-row{display:flex;justify-content:space-between;align-items:center;padding:8px 11px;border-radius:8px;margin-bottom:5px;border:1px solid transparent}
+.match-name{font-weight:700;font-size:12px;font-family:'Libre Baskerville',serif}
+.match-reg{font-size:9px;color:var(--mu);margin-left:7px}
+/* FOOTER */
+#footer{max-width:960px;margin:0 auto;padding:14px 20px;border-top:1px solid var(--bd);font-size:9px;color:var(--li)}
+</style>
 </head>
 <body>
-  <div id="root">
-    <div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px;background:#F6F3ED;">
-      <div style="font-family:Georgia,serif;font-size:28px;color:#1B3A5C;font-weight:700;">IIN-Latin America</div>
-      <div style="font-size:13px;color:#6B7280;letter-spacing:2px;text-transform:uppercase;">Loading platform…</div>
+
+<!-- HEADER -->
+<div id="hdr">
+  <div id="hdr-top">
+    <div id="hdr-brand">
+      <div>
+        <div id="brand-title" id="brand-txt">IIN-Latin America</div>
+        <div id="brand-sub">Illinois Innovation Network · University Partnership Platform</div>
+      </div>
+      <div id="brand-divider"></div>
+      <div id="brand-corridor">IIN-Córdoba</div>
+    </div>
+    <div id="hdr-controls">
+      <div id="lang-toggle">
+        <button class="lang-btn active" onclick="setLang('en')">EN 🇺🇸</button>
+        <button class="lang-btn" onclick="setLang('es')">ES 🇦🇷</button>
+      </div>
+      <select id="corr-select">
+        <option>IIN-Córdoba 🇦🇷</option>
+        <option disabled>IIN-Peru 🇵🇪 (Soon)</option>
+        <option disabled>IIN-Ecuador 🇪🇨 (Soon)</option>
+        <option disabled>IIN-Paraguay 🇵🇾 (Soon)</option>
+      </select>
     </div>
   </div>
-  <script type="text/babel" data-presets="react">
-const { useState, useMemo } = React;
-const C={bg:"#F6F3ED",surface:"#FFFFFF",warm:"#F0EDE6",navy:"#1B3A5C",navyMid:"#2C5282",navyLight:"#EBF0F8",gold:"#B5752A",goldLight:"#F7EDD8",goldDark:"#8B5A1E",green:"#2E6B4F",text:"#1A1F2E",muted:"#6B7280",light:"#A0AEC0",border:"#DDD8CE",borderLight:"#EDE9E1",t1c:"#2E6B4F",t1bg:"#E0F2EB",t2c:"#2C5282",t2bg:"#DBEAFE",t3c:"#B5752A",t3bg:"#F7EDD8
+  <div id="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('overview',this)">Overview</button>
+    <button class="nav-tab" onclick="showPage('directory',this)">Directory</button>
+    <button class="nav-tab" onclick="showPage('matrix',this)">Match Matrix (108)</button>
+    <button class="nav-tab" onclick="showPage('faculty',this)">Faculty Finder (105)</button>
+  </div>
+</div>
+
+<!-- PAGES -->
+<div id="page-overview" class="page active"></div>
+<div id="page-directory" class="page"></div>
+<div id="page-matrix" class="page"></div>
+<div id="page-faculty" class="page"></div>
+<div id="detail-view"></div>
+<div id="footer"></div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────
+const IIN_IDS=["uiuc","uic","uis","niu","isu","siuc","siue","wiu","eiu","neiu","gsu","csu"];
+const CBA_IDS=["unc","utn","ucc","sig","ubp","unvm","upc","iua","unrc"];
+const UNAMES={uiuc:"UIUC",uic:"UIC",uis:"UIS",niu:"NIU",isu:"ISU",siuc:"SIUC",siue:"SIUE",wiu:"WIU",eiu:"EIU",neiu:"NEIU",gsu:"GSU",csu:"CSU",unc:"UNC",utn:"UTN-FRC",ucc:"UCC",sig:"Siglo 21",ubp:"UBP",unvm:"UNVM",upc:"UPC",iua:"IUA",unrc:"UNRC"};
+const UREGION={uiuc:"Champaign-Urbana, IL",uic:"Chicago, IL",uis:"Springfield, IL",niu:"DeKalb, IL",isu:"Normal, IL",siuc:"Carbondale, IL",siue:"Edwardsville, IL",wiu:"Macomb, IL",eiu:"Charleston, IL",neiu:"Chicago, IL",gsu:"University Park, IL",csu:"Chicago, IL",unc:"Córdoba",utn:"Córdoba",ucc:"Córdoba",sig:"Córdoba",ubp:"Córdoba",unvm:"Villa María",upc:"Córdoba",iua:"Córdoba",unrc:"Río Cuarto"};
+const UFULL={uiuc:"University of Illinois Urbana-Champaign",uic:"University of Illinois Chicago",uis:"University of Illinois Springfield",niu:"Northern Illinois University",isu:"Illinois State University",siuc:"Southern Illinois University Carbondale",siue:"Southern Illinois University Edwardsville",wiu:"Western Illinois University",eiu:"Eastern Illinois University",neiu:"Northeastern Illinois University",gsu:"Governors State University",csu:"Chicago State University",unc:"Universidad Nacional de Córdoba",utn:"Universidad Tecnológica Nacional – FR Córdoba",ucc:"Universidad Católica de Córdoba",sig:"Universidad Siglo 21",ubp:"Universidad Blas Pascal",unvm:"Universidad Nacional de Villa María",upc:"Universidad Provincial de Córdoba",iua:"Instituto Universitario Aeronáutico",unrc:"Universidad Nacional de Río Cuarto"};
+const UHUB={uiuc:"Flagship Research Hub",uic:"Urban Innovation Hub",uis:"Capital & Policy Hub",niu:"STEM & Business Hub",isu:"Education & Behavioral Sciences Hub",siuc:"Energy & Environment Hub",siue:"Health Sciences Hub",wiu:"Rural & Agricultural Hub",eiu:"Transfer & Access Hub",neiu:"Bilingual Education Hub",gsu:"Supply Chain & Workforce Hub",csu:"Community Health & Equity Hub",unc:"LatAm Research Flagship",utn:"Engineering & Industry 4.0 Hub",ucc:"Jesuit Values & Professional Formation Hub",sig:"Digital Education & Workforce Scale Hub",ubp:"Legal Innovation & Tech Entrepreneurship Hub",unvm:"Agri-Food Systems & Rural Innovation Hub",upc:"Creative Industries & Applied Education Hub",iua:"Aerospace Engineering & Defense Hub",unrc:"Agro-Biotechnology & Environmental Systems Hub"};
+const MATRIX={uiuc:{unc:93,utn:88,ucc:75,sig:65,ubp:68,unvm:87,upc:65,iua:82,unrc:88},uic:{unc:90,utn:82,ucc:84,sig:68,ubp:70,unvm:75,upc:70,iua:68,unrc:72},uis:{unc:80,utn:65,ucc:83,sig:77,ubp:75,unvm:70,upc:75,iua:55,unrc:68},niu:{unc:82,utn:88,ucc:72,sig:78,ubp:76,unvm:70,upc:68,iua:75,unrc:72},isu:{unc:79,utn:68,ucc:83,sig:72,ubp:65,unvm:84,upc:82,iua:58,unrc:82},siuc:{unc:80,utn:84,ucc:72,sig:63,ubp:65,unvm:86,upc:65,iua:90,unrc:85},siue:{unc:86,utn:80,ucc:79,sig:65,ubp:68,unvm:76,upc:70,iua:72,unrc:72},wiu:{unc:72,utn:75,ucc:76,sig:62,ubp:65,unvm:88,upc:72,iua:62,unrc:86},eiu:{unc:77,utn:65,ucc:81,sig:72,ubp:63,unvm:80,upc:80,iua:58,unrc:78},neiu:{unc:82,utn:65,ucc:84,sig:80,ubp:68,unvm:70,upc:83,iua:60,unrc:65},gsu:{unc:75,utn:68,ucc:79,sig:87,ubp:65,unvm:81,upc:75,iua:63,unrc:70},csu:{unc:78,utn:65,ucc:85,sig:82,ubp:63,unvm:72,upc:76,iua:60,unrc:65}};
+const FACULTY=[
+{u:"uiuc",n:"Tarek Abdelzaher",d:"Computer Science",k:["cyber-physical systems","IoT","distributed systems"],h:100},
+{u:"uiuc",n:"Ed Diener",d:"Psychology",k:["subjective well-being","happiness","positive psychology"],h:220},
+{u:"uiuc",n:"Jiawei Han",d:"Computer Science",k:["data mining","machine learning","knowledge discovery"],h:170},
+{u:"uiuc",n:"Thomas S. Huang",d:"Electrical Engineering",k:["computer vision","signal processing","machine learning"],h:160},
+{u:"uiuc",n:"Shuming Nie",d:"Bioengineering",k:["nanotechnology","molecular imaging","cancer diagnostics"],h:113},
+{u:"uic",n:"Deirdre McCloskey",d:"Economics & History",k:["economic history","rhetoric of economics","bourgeois virtues"],h:95},
+{u:"uic",n:"Bing Liu",d:"Computer Science",k:["machine learning","sentiment analysis","natural language processing"],h:154},
+{u:"uic",n:"S. Jay Olshansky",d:"Public Health",k:["aging","longevity","public health"],h:110},
+{u:"uic",n:"Emily Talen",d:"Urban Planning",k:["urban planning","urban design","new urbanism"],h:67},
+{u:"uic",n:"Philip S. Yu",d:"Computer Science",k:["data mining","graph mining","big data"],h:190},
+{u:"uis",n:"Brian Chen",d:"Computer Science",k:["machine learning","data analytics","AI"],h:27},
+{u:"uis",n:"Matthew Holden Jr.",d:"Political Science",k:["public administration","political theory","governance"],h:42},
+{u:"uis",n:"John Martin",d:"Public Administration",k:["public policy","government finance","administration"],h:24},
+{u:"uis",n:"Michael T. Murphy",d:"Biology",k:["avian ecology","behavioral ecology","ornithology"],h:38},
+{u:"uis",n:"Karen Swan",d:"Education",k:["online learning","instructional design","distance education"],h:85},
+{u:"niu",n:"Thomas D. Czech",d:"Physics",k:["accelerator physics","particle beams","materials science"],h:41},
+{u:"niu",n:"Lisa C. Freeman",d:"Biology",k:["endocrinology","physiology","animal science"],h:33},
+{u:"niu",n:"David Gunkel",d:"Communication",k:["AI ethics","robot ethics","technology philosophy"],h:52},
+{u:"niu",n:"Wen-Hsiang Hsieh",d:"Mechanical Engineering",k:["robotics","automation","manufacturing systems"],h:36},
+{u:"niu",n:"Gregory H. Saxton",d:"Management",k:["social media","nonprofit organizations","digital communication"],h:58},
+{u:"isu",n:"Jim Ankney",d:"Biological Sciences",k:["wildlife ecology","ornithology","wetland ecosystems"],h:57},
+{u:"isu",n:"John Baur",d:"Chemistry",k:["organic chemistry","chemical education","synthetic chemistry"],h:46},
+{u:"isu",n:"Steven A. Juliano",d:"Biological Sciences",k:["ecology","mosquito ecology","evolutionary biology"],h:73},
+{u:"isu",n:"Ali Riaz",d:"Politics & Government",k:["democracy","South Asian politics","political Islam"],h:44},
+{u:"isu",n:"Loretta A. Williams",d:"Psychology",k:["cognitive psychology","learning","human behavior"],h:31},
+{u:"siuc",n:"David DuBois",d:"Psychology",k:["youth mentoring","community psychology","child development"],h:95},
+{u:"siuc",n:"Sibdas Ghosh",d:"Medicine",k:["cancer biology","cell signaling","molecular medicine"],h:82},
+{u:"siuc",n:"Yash P. Gupta",d:"MIS",k:["operations management","MIS","decision sciences"],h:51},
+{u:"siuc",n:"M. Nazmul Karim",d:"Civil Engineering",k:["environmental engineering","water treatment","sustainability"],h:48},
+{u:"siuc",n:"Karen Mossberger",d:"Political Science",k:["digital governance","smart cities","public policy"],h:78},
+{u:"siue",n:"Sharon Locke",d:"Biological Sciences",k:["STEM education","science education","undergraduate research"],h:49},
+{u:"siue",n:"William Retzlaff",d:"Biological Sciences",k:["wetland ecology","environmental sustainability","restoration ecology"],h:42},
+{u:"siue",n:"Klaus Schmees",d:"Physics",k:["materials science","nanotechnology","applied physics"],h:29},
+{u:"siue",n:"Jason Stacy",d:"History",k:["American history","civil war","political history"],h:24},
+{u:"siue",n:"Ming-Hsien Tsai",d:"Civil Engineering",k:["transportation engineering","traffic safety","smart mobility"],h:36},
+{u:"wiu",n:"William H. Bailey",d:"Law Enforcement",k:["criminal justice","policing","justice systems"],h:39},
+{u:"wiu",n:"Brian J. Dollinger",d:"Psychology",k:["personality psychology","motivation","behavior"],h:34},
+{u:"wiu",n:"Kenneth D. Hawkinson",d:"Education",k:["higher education","student success","leadership"],h:27},
+{u:"wiu",n:"Michael E. Hunt",d:"Agriculture",k:["agriculture","soil science","crop systems"],h:31},
+{u:"wiu",n:"James W. McKee",d:"Recreation & Tourism",k:["tourism","recreation management","rural development"],h:29},
+{u:"eiu",n:"Ryan Hendrickson",d:"Political Science",k:["national security","foreign policy","presidential power"],h:41},
+{u:"eiu",n:"Erik L. Johnson",d:"Kinesiology",k:["exercise science","sports performance","human physiology"],h:29},
+{u:"eiu",n:"Dennis W. Sunal",d:"Education",k:["science education","teacher preparation","curriculum development"],h:54},
+{u:"eiu",n:"Karen L. Swenson",d:"Psychology",k:["clinical psychology","mental health","behavioral science"],h:32},
+{u:"eiu",n:"Gordon C. Tucker",d:"Biological Sciences",k:["botany","plant ecology","environmental biology"],h:37},
+{u:"neiu",n:"Daniel L. Duke",d:"Educational Leadership",k:["educational leadership","school reform","teacher development"],h:61},
+{u:"neiu",n:"Nancy Matthews",d:"Geography",k:["GIS","environmental geography","urban systems"],h:36},
+{u:"neiu",n:"Martha C. Nussbaum",d:"Philosophy",k:["ethics","political philosophy","human development"],h:190},
+{u:"neiu",n:"Enrique C. Ochoa",d:"History",k:["Latin American history","social movements","Mexican studies"],h:42},
+{u:"neiu",n:"Maria T. Palma-Rivas",d:"Computer Science",k:["computer science education","cybersecurity","STEM diversity"],h:28},
+{u:"gsu",n:"Larry D. Levin",d:"Business",k:["supply chain","operations management","logistics"],h:31},
+{u:"gsu",n:"Eunice E. Santos",d:"Information Technology",k:["network science","AI","computational systems"],h:74},
+{u:"gsu",n:"Loretta Walls",d:"Health Administration",k:["healthcare management","public health","health policy"],h:34},
+{u:"gsu",n:"Phyllis M. West",d:"Education",k:["adult education","leadership","curriculum design"],h:27},
+{u:"gsu",n:"Jun Zhao",d:"Computer Science",k:["cybersecurity","data science","AI"],h:29},
+{u:"csu",n:"Ramon B. Goings",d:"Educational Leadership",k:["Black education","urban education","equity"],h:41},
+{u:"csu",n:"Sheryl A. Harley",d:"Health Sciences",k:["community health","public health","health equity"],h:29},
+{u:"csu",n:"Bonita C. Jacobs",d:"Education",k:["educational leadership","higher education","student success"],h:26},
+{u:"csu",n:"Temitope K. Oladipo",d:"Computer Science",k:["cybersecurity","data systems","software engineering"],h:24},
+{u:"csu",n:"Carl A. West",d:"Pharmacy",k:["pharmaceutical sciences","clinical pharmacy","healthcare systems"],h:32},
+{u:"unc",n:"Sandra Díaz",d:"Biological Sciences",k:["ecology","biodiversity","climate change"],h:145},
+{u:"unc",n:"Luis Juncos",d:"Medicine",k:["cardiology","hypertension","renal physiology"],h:55},
+{u:"unc",n:"Hugo Luján",d:"Molecular Biology",k:["parasitology","giardia","molecular microbiology"],h:78},
+{u:"unc",n:"Gabriel Rabinovich",d:"Immunology",k:["immunology","cancer biology","glycobiology"],h:120},
+{u:"unc",n:"Carolina Scotto",d:"Physics",k:["theoretical physics","quantum systems","condensed matter"],h:42},
+{u:"utn",n:"Carlos A. Disalvo",d:"Industrial Engineering",k:["industry 4.0","manufacturing systems","industrial automation"],h:39},
+{u:"utn",n:"Pablo De Giusti",d:"Computer Engineering",k:["distributed systems","high performance computing","parallel processing"],h:51},
+{u:"utn",n:"Raúl A. Gallardo",d:"Electrical Engineering",k:["renewable energy","power systems","smart grids"],h:36},
+{u:"utn",n:"Marcelo A. Soria",d:"Mechanical Engineering",k:["fluid mechanics","computational modeling","thermal systems"],h:44},
+{u:"utn",n:"Ana María Turjanski",d:"Systems Engineering",k:["software engineering","AI","data systems"],h:47},
+{u:"ucc",n:"María Teresa Bosio",d:"Social Sciences",k:["sociology","social inequality","Latin American studies"],h:31},
+{u:"ucc",n:"Luis E. Cámera",d:"Medicine",k:["internal medicine","gerontology","public health"],h:42},
+{u:"ucc",n:"Marcelo Manucci",d:"Communication",k:["strategic communication","organizational leadership","innovation"],h:29},
+{u:"ucc",n:"María Alejandra Vitale",d:"Psychology",k:["mental health","clinical psychology","social psychology"],h:34},
+{u:"ucc",n:"José María Willington",d:"Agronomy",k:["agriculture","soil science","sustainable farming"],h:37},
+{u:"sig",n:"Santiago Bilinkis",d:"Innovation & Technology",k:["innovation","digital transformation","entrepreneurship"],h:28},
+{u:"sig",n:"Pablo A. Bongiovanni",d:"Business",k:["entrepreneurship","innovation","business strategy"],h:26},
+{u:"sig",n:"Silvina Giaganti",d:"Education",k:["online education","educational technology","digital learning"],h:20},
+{u:"sig",n:"Mariela Mociulsky",d:"Marketing",k:["consumer behavior","digital marketing","UX research"],h:22},
+{u:"sig",n:"Andrés Pallaro",d:"Political Science",k:["data analytics","public policy","digital governance"],h:24},
+{u:"ubp",n:"Carlos Beltramo",d:"Architecture",k:["urban planning","sustainable cities","architecture"],h:26},
+{u:"ubp",n:"Javier Díaz Araujo",d:"IT",k:["software engineering","AI","data systems"],h:24},
+{u:"ubp",n:"María Fernanda Juárez",d:"Business",k:["entrepreneurship","SMEs","business strategy"],h:21},
+{u:"ubp",n:"Paula Lucero",d:"Psychology",k:["organizational psychology","leadership","human behavior"],h:18},
+{u:"ubp",n:"Horacio Roitman",d:"Law",k:["legal technology","digital law","innovation policy"],h:23},
+{u:"unvm",n:"Jorge Anunziata",d:"Political Science",k:["governance","public policy","democracy"],h:29},
+{u:"unvm",n:"María Alejandra Barbero",d:"Social Sciences",k:["rural development","social policy","regional economics"],h:27},
+{u:"unvm",n:"Ana Laura López",d:"Computer Science",k:["data science","AI","information systems"],h:24},
+{u:"unvm",n:"Carolina Morgante",d:"Biological Sciences",k:["genetics","plant biology","agricultural biotechnology"],h:41},
+{u:"unvm",n:"Pablo Rosso",d:"Food Sciences",k:["food systems","nutrition","agri-food innovation"],h:32},
+{u:"upc",n:"Patricia Altamirano",d:"Arts & Design",k:["design","creative industries","visual communication"],h:17},
+{u:"upc",n:"María Teresa Andruetto",d:"Literature",k:["literature","cultural studies","education"],h:22},
+{u:"upc",n:"Silvina Barroso",d:"Education",k:["pedagogy","teacher education","curriculum"],h:18},
+{u:"upc",n:"Marcelo Conrero",d:"Public Policy",k:["innovation","public policy","regional development"],h:24},
+{u:"upc",n:"Laura Rosso",d:"Social Sciences",k:["social inclusion","community development","education policy"],h:20},
+{u:"iua",n:"Miguel Ángel Ferreyra",d:"Electrical Engineering",k:["power systems","electronics","embedded systems"],h:20},
+{u:"iua",n:"Carlos María Giordano",d:"Aerospace Engineering",k:["aerospace engineering","avionics","flight systems"],h:29},
+{u:"iua",n:"Patricia Beatriz López",d:"Systems Engineering",k:["systems engineering","AI","automation"],h:22},
+{u:"iua",n:"Raúl Ernesto Martínez",d:"Mechanical Engineering",k:["mechanical systems","aerodynamics","manufacturing"],h:24},
+{u:"iua",n:"Verónica Isabel Suárez",d:"Industrial Engineering",k:["industry 4.0","operations management","innovation"],h:18},
+{u:"unrc",n:"Laura Ana Bressan",d:"Economics",k:["regional economics","rural development","public policy"],h:29},
+{u:"unrc",n:"Daniela Monica Ciravegna",d:"Biological Sciences",k:["biotechnology","genetics","molecular biology"],h:41},
+{u:"unrc",n:"Jorge González",d:"Environmental Engineering",k:["environmental systems","water management","sustainability"],h:33},
+{u:"unrc",n:"María Cristina Nazario",d:"Veterinary Sciences",k:["veterinary medicine","animal health","livestock systems"],h:36},
+{u:"unrc",n:"Roberto Andrés Pilatti",d:"Agricultural Sciences",k:["agronomy","soil science","sustainable agriculture"],h:48}
+];
+
+// ── UI TRANSLATIONS ───────────────────────────────────────────────────
+const UI={
+en:{
+  brandTitle:"IIN-Latin America",brandSub:"Illinois Innovation Network · University Partnership Platform",
+  tabs:["Overview","Directory","Match Matrix (108)","Faculty Finder (105)"],
+  active:"● ACTIVE",planned:"○ PLANNED",
+  stats:[["12","IIN Universities"],["9","Córdoba Universities"],["108","Scored Pairings"],["105","Researchers"],["21","Premier Matches"],["4","Corridors Planned"]],
+  corridors:[{n:"IIN-Córdoba",f:"🇦🇷",s:1,sub:"Córdoba, Argentina · 9 universities"},{n:"IIN-Peru",f:"🇵🇪",s:0,sub:"Lima · 2026"},{n:"IIN-Ecuador",f:"🇪🇨",s:0,sub:"Quito & Guayaquil · 2026"},{n:"IIN-Paraguay",f:"🇵🇾",s:0,sub:"Asunción · 2027"}],
+  howSteps:[{n:"01",t:"Build Your Profile",d:"Submit your institution's research strengths and partnership goals via a 20-minute bilingual intake survey."},{n:"02",t:"AI-Powered Matching",d:"The platform scores your institution against all partners across research overlap, mission, scale, and strategic priorities."},{n:"03",t:"Explore Opportunities",d:"Browse your full match map — Premier through Exploratory. Every institution has multiple viable partners."},{n:"04",t:"Request Introduction",d:"International office staff request a facilitated introduction connecting the right contacts on both sides."}],
+  quickBtns:["Browse University Directory","View Full Match Matrix","Find Research Partners"],
+  searchPlaceholder:"Search by institution, region, or research area…",
+  filters:["All","🇺🇸 IIN Illinois","🇦🇷 Córdoba"],
+  iinTag:"Illinois IIN",cbaTag:"Córdoba, Argentina",researchers:"researchers",
+  dirHint:"institutions · Tap any card for full profile and matches",
+  matrixTitle:"Full Partnership Opportunity Matrix",
+  matrixDesc:"108 IIN × Córdoba pairings scored across research alignment, mission, scale, and collaboration readiness.",
+  tiers:["Premier Partnership 85%+","Strong Opportunity 75–84%","Emerging Connection 65–74%","Exploratory < 65%"],
+  matrixNote:"Scores reflect research alignment, institutional mission, scale compatibility, and international readiness.",
+  kwTitle:"KEYWORD SEARCH",kwPlaceholder:"Type a keyword (e.g. ecology, AI, agriculture, public health…)",
+  pairsLabel:"Cross-Corridor Research Pairs",iinRes:"🇺🇸 IIN Researchers",cbaRes:"🇦🇷 Córdoba Researchers",
+  noResults:"No matches found. Try a different keyword.",sharedResearch:"Shared research:",
+  facultyTitle:"Faculty Research Finder",facultyDesc:"105 researchers across 21 universities. Search by keyword to find matching faculty on both sides of the corridor and discover cross-institution research pairs.",
+  tabFaculty:"Faculty",tabMatches:"Partnership Matches",allMatches:"All Partnership Matches — Scored",
+  back:"← Directory",iinLabel:"Illinois Innovation Network",cbaLabel:"Córdoba, Argentina",
+  footer:"IIN-Latin America · Illinois Innovation Network · IIN-Córdoba · IIN-Peru · IIN-Ecuador · IIN-Paraguay · 2026"
+},
+es:{
+  brandTitle:"IIN-América Latina",brandSub:"Red de Innovación de Illinois · Plataforma de Alianzas Universitarias",
+  tabs:["Inicio","Directorio","Matriz de Alianzas (108)","Investigadores (105)"],
+  active:"● ACTIVO",planned:"○ EN DESARROLLO",
+  stats:[["12","Universidades IIN"],["9","Universidades Córdoba"],["108","Pares Evaluados"],["105","Investigadores"],["21","Alianzas Premier"],["4","Corredores"]],
+  corridors:[{n:"IIN-Córdoba",f:"🇦🇷",s:1,sub:"Córdoba, Argentina · 9 universidades"},{n:"IIN-Perú",f:"🇵🇪",s:0,sub:"Lima · 2026"},{n:"IIN-Ecuador",f:"🇪🇨",s:0,sub:"Quito y Guayaquil · 2026"},{n:"IIN-Paraguay",f:"🇵🇾",s:0,sub:"Asunción · 2027"}],
+  howSteps:[{n:"01",t:"Cree su Perfil",d:"Envíe el enfoque de investigación y metas de alianza de su institución mediante una encuesta bilingüe de 20 minutos."},{n:"02",t:"Emparejamiento con IA",d:"La plataforma evalúa su institución frente a todos los socios en investigación, misión, escala y prioridades estratégicas."},{n:"03",t:"Explore Oportunidades",d:"Consulte su mapa completo de alianzas. Cada institución tiene múltiples socios viables."},{n:"04",t:"Solicite una Presentación",d:"El personal de relaciones internacionales solicita una presentación facilitada entre las instituciones correctas."}],
+  quickBtns:["Ver Directorio de Universidades","Ver Matriz Completa","Buscar Investigadores"],
+  searchPlaceholder:"Buscar por institución, región o área de investigación…",
+  filters:["Todas","🇺🇸 IIN Illinois","🇦🇷 Córdoba"],
+  iinTag:"Illinois IIN",cbaTag:"Córdoba, Argentina",researchers:"investigadores",
+  dirHint:"instituciones · Toque cualquier tarjeta para ver el perfil completo",
+  matrixTitle:"Matriz Completa de Oportunidades de Alianza",
+  matrixDesc:"108 pares IIN × Córdoba evaluados por alineación de investigación, misión, escala y preparación para colaborar.",
+  tiers:["Alianza Premier 85%+","Oportunidad Sólida 75–84%","Conexión Emergente 65–74%","Exploratoria < 65%"],
+  matrixNote:"Las puntuaciones reflejan alineación de investigación, misión institucional, compatibilidad de escala y preparación internacional.",
+  kwTitle:"BÚSQUEDA POR PALABRA CLAVE",kwPlaceholder:"Escriba una palabra clave (ej. ecología, IA, agricultura, salud pública…)",
+  pairsLabel:"Pares de Investigación del Corredor",iinRes:"🇺🇸 Investigadores IIN",cbaRes:"🇦🇷 Investigadores Córdoba",
+  noResults:"Sin resultados. Pruebe con otra palabra clave.",sharedResearch:"Investigación compartida:",
+  facultyTitle:"Buscador de Investigadores",facultyDesc:"105 investigadores en 21 universidades. Busque por palabra clave para encontrar investigadores en ambos lados del corredor.",
+  tabFaculty:"Investigadores",tabMatches:"Oportunidades de Alianza",allMatches:"Todas las Oportunidades — Puntuadas",
+  back:"← Directorio",iinLabel:"Red de Innovación de Illinois",cbaLabel:"Córdoba, Argentina",
+  footer:"IIN-América Latina · Red de Innovación de Illinois · IIN-Córdoba · IIN-Perú · IIN-Ecuador · IIN-Paraguay · 2026"
+}};
+
+// ── STATE ─────────────────────────────────────────────────────────────
+let lang='en', currentPage='overview', filterIdx=0, selectedUni=null;
+const IIN_ALPHA=[...IIN_IDS].sort((a,b)=>UNAMES[a].localeCompare(UNAMES[b]));
+const CBA_ALPHA=[...CBA_IDS].sort((a,b)=>UNAMES[a].localeCompare(UNAMES[b]));
+const byLast=(a,b)=>a.n.split(' ').pop().localeCompare(b.n.split(' ').pop());
+
+// ── HELPERS ───────────────────────────────────────────────────────────
+function tierClass(s){return s>=85?'t1':s>=75?'t2':s>=65?'t3':'t4';}
+function tierLabel(s,l){
+  const en=['Premier','Strong','Emerging','Exploratory'],es=['Premier','Sólida','Emergente','Exploratoria'];
+  const idx=s>=85?0:s>=75?1:s>=65?2:3;
+  return (l==='es'?es:en)[idx];
+}
+function tierBg(s){return s>=85?'#E0F2EB':s>=75?'#DBEAFE':s>=65?'#F7EDD8':'#F3F4F6';}
+function tierClr(s){return s>=85?'#2E6B4F':s>=75?'#2C5282':s>=65?'#B5752A':'#6B7280';}
+function sharedKw(f1,f2){return f1.k.filter(k=>f2.k.some(k2=>k2.toLowerCase().includes(k.toLowerCase())||k.toLowerCase().includes(k2.toLowerCase())));}
+function tx(){return UI[lang];}
+
+// ── LANGUAGE ──────────────────────────────────────────────────────────
+function setLang(l){
+  lang=l;
+  document.querySelectorAll('.lang-btn').forEach(b=>{b.classList.toggle('active',b.textContent.startsWith(l.toUpperCase()));});
+  document.getElementById('brand-title').textContent=tx().brandTitle;
+  document.getElementById('brand-sub').textContent=tx().brandSub;
+  const tabs=document.querySelectorAll('.nav-tab');
+  tx().tabs.forEach((t,i)=>{if(tabs[i])tabs[i].textContent=t;});
+  document.getElementById('footer').innerHTML=`<div>${tx().footer}</div>`;
+  renderCurrentPage();
+}
+
+// ── NAV ───────────────────────────────────────────────────────────────
+function showPage(page,btn){
+  if(selectedUni){closeDetail();}
+  currentPage=page;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  renderCurrentPage();
+}
+function renderCurrentPage(){
+  if(currentPage==='overview')renderOverview();
+  else if(currentPage==='directory')renderDirectory();
+  else if(currentPage==='matrix')renderMatrix();
+  else if(currentPage==='faculty')renderFaculty();
+}
+
+// ── OVERVIEW ──────────────────────────────────────────────────────────
+function renderOverview(){
+  const t=tx();
+  document.getElementById('page-overview').innerHTML=`
+    <div class="shead">${t.tabs[0]==='Overview'?'IIN-LATIN AMERICA CORRIDOR NETWORK':'RED DE CORREDORES IIN-AMÉRICA LATINA'}</div>
+    <div class="corridor-grid">${t.corridors.map(c=>`<div class="corridor-card${c.s?' active-corridor':''}"><div class="corridor-flag">${c.f}</div><div class="corridor-name">${c.n}</div><div class="corridor-sub">${c.sub}</div><div class="corridor-status">${c.s?t.active:t.planned}</div></div>`).join('')}</div>
+    <div class="shead">${t.stats[0][1]==='IIN Universities'?'IIN-CÓRDOBA AT A GLANCE':'IIN-CÓRDOBA EN NÚMEROS'}</div>
+    <div class="stats-grid">${t.stats.map(([n,l])=>`<div class="stat-card"><div class="stat-n">${n}</div><div class="stat-l">${l}</div></div>`).join('')}</div>
+    <div class="shead">${t.howSteps[0].t==='Build Your Profile'?'HOW IIN-LATIN AMERICA WORKS':'CÓMO FUNCIONA IIN-AMÉRICA LATINA'}</div>
+    <div class="how-grid">${t.howSteps.map(s=>`<div class="how-card"><div class="how-n">${s.n}</div><div class="how-t">${s.t}</div><div class="how-d">${s.d}</div></div>`).join('')}</div>
+    <div class="shead">${t.quickBtns[0].includes('Browse')||t.quickBtns[0].includes('Ver')?'QUICK NAVIGATION':'ACCESOS RÁPIDOS'}</div>
+    <div class="quick-btns">
+      <button class="quick-btn primary" onclick="showPage('directory',document.querySelectorAll('.nav-tab')[1])">${t.quickBtns[0]}</button>
+      <button class="quick-btn" onclick="showPage('matrix',document.querySelectorAll('.nav-tab')[2])">${t.quickBtns[1]}</button>
+      <button class="quick-btn" onclick="showPage('faculty',document.querySelectorAll('.nav-tab')[3])">${t.quickBtns[2]}</button>
+    </div>`;
+}
+
+// ── DIRECTORY ─────────────────────────────────────────────────────────
+function renderDirectory(){
+  const t=tx();
+  const all=[...IIN_IDS,...CBA_IDS].map(id=>({id,isIIN:IIN_IDS.includes(id)})).sort((a,b)=>UNAMES[a.id].localeCompare(UNAMES[b.id]));
+  const q=(document.getElementById('dir-search')||{value:''}).value.toLowerCase();
+  const shown=all.filter(u=>{
+    if(filterIdx===1&&!u.isIIN)return false;
+    if(filterIdx===2&&u.isIIN)return false;
+    if(!q)return true;
+    const fac=FACULTY.filter(f=>f.u===u.id);
+    return UNAMES[u.id].toLowerCase().includes(q)||UFULL[u.id].toLowerCase().includes(q)||UREGION[u.id].toLowerCase().includes(q)||fac.some(f=>f.k.some(k=>k.toLowerCase().includes(q)));
+  });
+  document.getElementById('page-directory').innerHTML=`
+    <div class="dir-controls">
+      <input id="dir-search" placeholder="${t.searchPlaceholder}" value="${q}" oninput="renderDirectory()" style="flex:1;min-width:160px;padding:8px 12px;border-radius:8px;border:1.5px solid var(--bd);background:var(--sf);font-size:12px;outline:none"/>
+      ${t.filters.map((f,i)=>`<button class="filter-btn${filterIdx===i?' active':''}" onclick="setFilter(${i})">${f}</button>`).join('')}
+    </div>
+    <div id="dir-hint">${shown.length} ${t.dirHint}</div>
+    <div class="uni-grid">${shown.map(u=>uniCard(u.id,u.isIIN)).join('')}</div>`;
+}
+function setFilter(i){filterIdx=i;renderDirectory();}
+function uniCard(id,isIIN){
+  const fac=FACULTY.filter(f=>f.u===id);
+  const topKw=[...new Set(fac.flatMap(f=>f.k))].slice(0,4);
+  const ac=isIIN?'var(--nv)':'var(--gk)';
+  const bg=isIIN?'var(--nl)':'var(--gl)';
+  const t=tx();
+  return `<div class="uni-card" onclick="selectUni('${id}')">
+    <div class="uni-card-top">
+      <div><div class="uni-abbr">${UNAMES[id]}</div><div class="uni-tag" style="color:${ac}">${isIIN?t.iinTag:t.cbaTag}</div></div>
+      <div class="uni-count" style="background:${bg};color:${ac}">${fac.length} ${t.researchers}</div>
+    </div>
+    <div class="uni-region">${UREGION[id]}</div>
+    <div class="pills">${topKw.map(k=>`<span class="pill${isIIN?'':' pill-gold'}">${k}</span>`).join('')}</div>
+  </div>`;
+}
+
+// ── MATRIX ────────────────────────────────────────────────────────────
+function renderMatrix(){
+  const t=tx();
+  const legColors=[['var(--t1c)','var(--t1b)'],['var(--t2c)','var(--t2b)'],['var(--t3c)','var(--t3b)'],['var(--t4c)','var(--t4b)']];
+  const legend=t.tiers.map((l,i)=>`<div class="leg-item" style="background:${legColors[i][1]};color:${legColors[i][0]};border-color:${legColors[i][0]}44"><div style="width:8px;height:8px;border-radius:2px;background:${legColors[i][0]}"></div>${l}</div>`).join('');
+  const colHeaders=CBA_ALPHA.map(c=>`<th><div style="font-size:10px;font-weight:800">${UNAMES[c]}</div><div style="font-size:7px;opacity:.7;margin-top:1px">${UREGION[c]}</div></th>`).join('');
+  const rows=IIN_ALPHA.map((r,ri)=>{
+    const cells=CBA_ALPHA.map(c=>{
+      const s=MATRIX[r][c],tc=tierClass(s),cl=tierClr(s),bg=tierBg(s);
+      return `<td style="background:${bg};color:${cl}"><div>${s}</div><div class="td-tier" style="color:${cl}">${tierLabel(s,lang)}</div></td>`;
+    }).join('');
+    return `<tr><td style="background:${ri%2===0?'#fff':'var(--wm)'}"><div class="td-name">${UNAMES[r]}</div><div class="td-reg">${UREGION[r]}</div></td>${cells}</tr>`;
+  }).join('');
+  document.getElementById('page-matrix').innerHTML=`
+    <div style="margin-bottom:14px"><div style="font-size:18px;font-family:'Libre Baskerville',serif;color:var(--nv);margin-bottom:4px">${t.matrixTitle}</div><div style="font-size:11px;color:var(--mu)">${t.matrixDesc}</div></div>
+    <div class="matrix-legend">${legend}</div>
+    <div class="matrix-wrap"><table><thead><tr><th style="text-align:left;border-right:1px solid rgba(255,255,255,.2);border-left:none">IIN</th>${colHeaders}</tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="matrix-note">${t.matrixNote}</div>`;
+}
+
+// ── FACULTY ───────────────────────────────────────────────────────────
+function renderFaculty(){
+  const t=tx();
+  document.getElementById('page-faculty').innerHTML=`
+    <div style="margin-bottom:18px"><div style="font-size:18px;font-family:'Libre Baskerville',serif;color:var(--nv);margin-bottom:4px">${t.facultyTitle}</div><div style="font-size:11px;color:var(--mu);line-height:1.7">${t.facultyDesc}</div></div>
+    <div class="kw-box">
+      <div class="kw-label">${t.kwTitle}</div>
+      <input id="kw-input" placeholder="${t.kwPlaceholder}" oninput="renderKwResults(this.value)" style="width:100%;padding:9px 12px;border-radius:8px;border:1.5px solid var(--bd);background:var(--bg);font-size:12px;color:var(--tx);outline:none;box-sizing:border-box"/>
+      <div id="kw-results"></div>
+    </div>`;
+}
+function renderKwResults(q){
+  const t=tx();
+  const el=document.getElementById('kw-results');
+  if(!q.trim()){el.innerHTML='';return;}
+  const ql=q.toLowerCase();
+  const matchF=f=>f.k.some(k=>k.toLowerCase().includes(ql)||ql.includes(k.toLowerCase()))||f.d.toLowerCase().includes(ql)||f.n.toLowerCase().includes(ql);
+  const iinF=FACULTY.filter(f=>IIN_IDS.includes(f.u)&&matchF(f)).sort(byLast).slice(0,8);
+  const cbaF=FACULTY.filter(f=>CBA_IDS.includes(f.u)&&matchF(f)).sort(byLast).slice(0,8);
+  if(!iinF.length&&!cbaF.length){el.innerHTML=`<div class="no-results">${t.noResults}</div>`;return;}
+  const pairs=[];
+  iinF.forEach(f1=>cbaF.forEach(f2=>{const sh=sharedKw(f1,f2);if(sh.length)pairs.push({f1,f2,sh});}));
+  pairs.sort((a,b)=>b.sh.length-a.sh.length);
+  let html='<div style="margin-top:14px">';
+  if(pairs.length){
+    html+=`<div class="shead">${t.pairsLabel} (${Math.min(pairs.length,8)})</div><div class="pairs-grid">`;
+    pairs.slice(0,8).forEach(({f1,f2,sh})=>{
+      html+=`<div class="pair-card">
+        <div class="pair-row"><div><div class="pair-name1">${f1.n}</div><div class="pair-uni1">${UNAMES[f1.u]} · ${f1.d}</div></div><div class="pair-arrow">↔</div><div><div class="pair-name2">${f2.n}</div><div class="pair-uni2">${UNAMES[f2.u]} · ${f2.d}</div></div></div>
+        <div class="shared-row"><span class="shared-label">${t.sharedResearch}</span>${sh.map(k=>`<span class="pill pill-gold">${k}</span>`).join('')}</div>
+      </div>`;
+    });
+    html+='</div>';
+  }
+  if(iinF.length||cbaF.length){
+    html+=`<div class="res-cols">`;
+    html+=`<div><div class="res-col-title" style="color:var(--nm)">${t.iinRes} (${iinF.length})</div>${iinF.map(f=>facCard(f,ql,true)).join('')}</div>`;
+    html+=`<div><div class="res-col-title" style="color:var(--gk)">${t.cbaRes} (${cbaF.length})</div>${cbaF.map(f=>facCard(f,ql,false)).join('')}</div>`;
+    html+='</div>';
+  }
+  html+='</div>';
+  el.innerHTML=html;
+}
+function facCard(f,ql,isIIN){
+  const ac=isIIN?'var(--nm)':'var(--gk)';
+  const bg=isIIN?'var(--nl)':'var(--gl)';
+  return `<div class="fac-card">
+    <div class="fac-top"><div><div class="fac-name">${f.n}</div><div class="fac-uni" style="color:${ac}">${UNAMES[f.u]} · ${f.d}</div></div><div class="fac-h" style="background:${bg};color:${ac}">h=${f.h}</div></div>
+    <div class="pills">${f.k.map(k=>`<span class="pill${(!isIIN||k.toLowerCase().includes(ql))?isIIN?'':' pill-gold':''}">${k}</span>`).join('')}</div>
+  </div>`;
+}
+
+// ── DETAIL VIEW ───────────────────────────────────────────────────────
+let detailTab='faculty';
+function selectUni(id){
+  selectedUni=id;
+  const isIIN=IIN_IDS.includes(id);
+  const ac=isIIN?'var(--nv)':'var(--gk)';
+  const bg=isIIN?'var(--nl)':'var(--gl)';
+  const t=tx();
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const dv=document.getElementById('detail-view');
+  dv.classList.add('active');
+  detailTab='faculty';
+  renderDetail();
+}
+function renderDetail(){
+  const id=selectedUni;
+  const isIIN=IIN_IDS.includes(id);
+  const ac=isIIN?'var(--nv)':'var(--gk)';
+  const bg=isIIN?'var(--nl)':'var(--gl)';
+  const t=tx();
+  const fac=FACULTY.filter(f=>f.u===id).sort(byLast);
+  const matrixRow=isIIN
+    ?Object.entries(MATRIX[id]).sort((a,b)=>b[1]-a[1])
+    :IIN_IDS.map(r=>[r,MATRIX[r][id]]).sort((a,b)=>b[1]-a[1]);
+  let body='';
+  if(detailTab==='faculty'){
+    body=`<div class="shead">${t.tabFaculty} — ${UNAMES[id]}</div>${fac.map(f=>`<div class="fac-card"><div class="fac-top"><div><div class="fac-name">${f.n}</div><div class="fac-uni" style="color:${ac}">${f.d}</div></div><div class="fac-h" style="background:${bg};color:${ac}">h=${f.h}</div></div><div class="pills">${f.k.map(k=>`<span class="pill${isIIN?'':' pill-gold'}">${k}</span>`).join('')}</div></div>`).join('')}`;
+  } else {
+    const tierKey=[['85%+','var(--t1c)','var(--t1b)'],['75–84%','var(--t2c)','var(--t2b)'],['65–74%','var(--t3c)','var(--t3b)'],['<65%','var(--t4c)','var(--t4b)']];
+    const legend=`<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:12px;font-size:8px;font-weight:700">${tierKey.map(([r,c,b])=>`<div style="background:${b};color:${c};border-radius:4px;padding:4px 5px;text-align:center;border:1px solid ${c}33">${r}</div>`).join('')}</div>`;
+    body=`<div class="shead">${t.allMatches}</div>${legend}${matrixRow.map(([mid,s])=>`<div class="match-row" style="background:${tierBg(s)};border-color:${tierClr(s)}33"><div><span class="match-name">${UNAMES[mid]}</span><span class="match-reg">${UREGION[mid]}</span></div><span class="tier ${tierClass(s)}">${s}% · ${tierLabel(s,lang)}</span></div>`).join('')}`;
+  }
+  document.getElementById('detail-view').innerHTML=`
+    <div class="detail-hdr" style="background:linear-gradient(135deg,${isIIN?'rgba(27,58,92,0.07)':'rgba(139,90,30,0.07)'},transparent);border-bottom:1px solid var(--bd)">
+      <button class="detail-back" style="color:${ac}" onclick="closeDetail()">← ${isIIN?t.iinLabel:t.cbaLabel}</button>
+      <div class="detail-abbr">${UNAMES[id]}</div>
+      <div class="detail-full" style="color:${ac}">${UFULL[id]}</div>
+      <div class="detail-region">${UREGION[id]}</div>
+      <div class="detail-hub" style="background:${bg};color:${ac};border-color:${ac}33">${UHUB[id]}</div>
+    </div>
+    <div class="detail-tabs">
+      <button class="detail-tab${detailTab==='faculty'?' active':''} ${isIIN?'':'active-gold'}" onclick="switchDetailTab('faculty')">${t.tabFaculty} (${fac.length})</button>
+      <button class="detail-tab${detailTab==='matches'?' active':''} ${isIIN?'':'active-gold'}" onclick="switchDetailTab('matches')">${t.tabMatches}</button>
+    </div>
+    <div class="detail-body">${body}</div>`;
+}
+function switchDetailTab(tab){detailTab=tab;renderDetail();}
+function closeDetail(){
+  selectedUni=null;detailTab='faculty';
+  document.getElementById('detail-view').classList.remove('active');
+  document.getElementById('page-'+currentPage).classList.add('active');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────
+document.getElementById('brand-title').textContent=UI.en.brandTitle;
+document.getElementById('brand-sub').textContent=UI.en.brandSub;
+document.getElementById('footer').innerHTML=`<div>${UI.en.footer}</div>`;
+renderOverview();
+</script>
+</body>
+</html>
